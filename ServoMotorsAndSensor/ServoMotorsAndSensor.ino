@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <DHT.h>
 
-#define DHTPIN 13
+#define DHTPIN A0
 #define DHTTYPE DHT22
 
 Servo servo1;
@@ -11,8 +11,7 @@ Servo servo4;
 
 DHT dht(DHTPIN, DHTTYPE);
 
-int i = 0;
-const float HUMIDITY_THRESHOLD = 50.0;
+const float HUMIDITY_THRESHOLD = 51.0;
 
 void setup() {
   Serial.begin(9600);
@@ -32,41 +31,32 @@ void loop() {
     return;
   }
 
-  Serial.print("Luftfeuchtigkeit: ");
+  Serial.print("Humidity: ");
   Serial.print(humidity);
-  Serial.print("%, Temperatur: ");
+  Serial.print("%, Temperature: ");
   Serial.print(temperature);
   Serial.println("°C");
 
-  // Entfernt die doppelte Bedingung für Luftfeuchtigkeit unter 50%
-  if (humidity > HUMIDITY_THRESHOLD || (temperature > 25 && temperature < 40)) {
-    Serial.println("Luftfeuchtigkeit über 50% oder Temperatur zwischen 25°C und 40°C - Starte Servo-Bewegung");
+  if (temperature > 50) {
+    Serial.println("Temperature above 50 degrees, suspected fire - Start servo movement");
 
-    for (i = 0; i < 180; i++) {
-      servo1.write(i);
-      servo2.write(i);
-      servo3.write(i);
-      servo4.write(i);
-      delay(10);
-    }
-  } else {
-    Serial.println("Bedingungen nicht erfüllt - Servos bleiben still.");
+    servo1.write(0);
+    servo2.write(0);
+    servo3.write(0);
+    servo4.write(180);
+    delay(10);
   }
 
-  if (temperature > 50) {
-    Serial.println("Temperatur über 50 Grad - Starte Servo-Bewegung");
+  if (humidity > HUMIDITY_THRESHOLD || (temperature > 25 && temperature < 40)) {
+    Serial.println("Humidity above 50% or temperature between 25°C and 40°C - Start servo movement");
 
-    for (i = 180; i > 0; i--) {  // Korrigiert die Schleife für rückwärts
-      servo1.write(i);
-      servo2.write(i);
-      servo3.write(i);
+      servo1.write(180);
+      servo2.write(180);
+      servo3.write(180);
+      servo4.write(180);
       delay(10);
-    }
-
-    for (i = 0; i < 180; i++) {
-      servo4.write(i);
-      delay(10);
-    }
+  } else {
+    Serial.println("Conditions not fulfilled - servos remain stationary.");
   }
 
   delay(2000);
