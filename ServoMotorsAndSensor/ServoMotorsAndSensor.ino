@@ -55,8 +55,15 @@ void loop() {
       servo3.write(180);
       servo4.write(180);
       delay(10);
-  } else {
-    Serial.println("Conditions not fulfilled - servos remain stationary.");
+  } 
+  
+  else {
+    Serial.println("Conditions not fulfilled - servos remain stationary or rotate back to the starting position.");
+
+    servo1.write(0);
+    servo2.write(0);
+    servo3.write(0);
+    servo4.write(0);
   }
 
   delay(2000);
