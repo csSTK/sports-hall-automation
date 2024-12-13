@@ -11,7 +11,7 @@ Servo servo4;
 
 DHT dht(DHTPIN, DHTTYPE);
 
-const float HUMIDITY_THRESHOLD = 51.0;
+const float HUMIDITY_THRESHOLD = 50.0;
 
 void setup() {
   Serial.begin(9600);
