@@ -59,5 +59,5 @@ void loop() {
   lcd.setCursor(8, 1); // Cursor "Team 2:"
   lcd.print(team2);    // Display points of team 2
 
-  delay(1000); // Short pause to make the output readable
+  delay(100); // Short pause to make the output readable
 }
